@@ -8,13 +8,9 @@ import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 import React from "react";
 Enzyme.configure({ adapter: new Adapter() });
 
-// let wrapper = 4;
-// beforeEach(() => {
-
-// })
-
 describe("Test internal link rendering", () => {
-  const wrapper = mount(
+ 
+    const wrapper = mount(
     <BrowserRouter>
       <UserContextProvider>
         <ActionPoint
@@ -32,15 +28,21 @@ describe("Test internal link rendering", () => {
       </UserContextProvider>
     </BrowserRouter>
   );
+
   it("renders username from context correctly", () => {
     expect(wrapper.find(".internal-link").text()).toContain("johndoe");
   });
 
-  it("render title correclty", () => {
+  it("render title correctly", () => {
     expect(wrapper.find(".internal-link").text()).toContain("Ext title");
   });
 
-  it("render style, top/left correclty", () => {
+  it("render link title correctly", () => {
+    expect(wrapper.find("span").prop("title")).toContain("My Frontend URL");
+  });
+
+
+  it("render style, top/left correctly", () => {
     expect(wrapper.find(".internal-link").prop("style")).toHaveProperty(
       "top",
       "30%"
@@ -118,7 +120,7 @@ describe("Test external link rendering", () => {
 });
 
 describe("Test icon cssClasses per iconKind", () => {
-    
+
   let wrapper;
   let iconCount = 0;
   beforeEach(() => {
