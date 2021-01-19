@@ -9,8 +9,7 @@ import React from "react";
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("Test internal link rendering", () => {
- 
-    const wrapper = mount(
+  const wrapper = mount(
     <BrowserRouter>
       <UserContextProvider>
         <ActionPoint
@@ -40,7 +39,6 @@ describe("Test internal link rendering", () => {
   it("render link title correctly", () => {
     expect(wrapper.find("span").prop("title")).toContain("My Frontend URL");
   });
-
 
   it("render style, top/left correctly", () => {
     expect(wrapper.find(".internal-link").prop("style")).toHaveProperty(
@@ -120,7 +118,6 @@ describe("Test external link rendering", () => {
 });
 
 describe("Test icon cssClasses per iconKind", () => {
-
   let wrapper;
   let iconCount = 0;
   beforeEach(() => {
