@@ -1,12 +1,128 @@
-import Enzyme, { shallow, mount } from "enzyme";
 
+
+import React from "react";
+import { mount } from "enzyme";
 import { BrowserRouter } from "react-router-dom";
 import ActionPoint from "../ActionPoint";
 import UserContextProvider from "../../contexts/UserContextProvider";
 
-import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
-import React from "react";
-Enzyme.configure({ adapter: new Adapter() });
+
+describe("Test actionPoint rendering", () => {
+  it("renders a external link correctly", () => {
+    const wrapper = mount(
+      <UserContextProvider>
+        <ActionPoint
+          title="Ext title"
+          description="test desc"
+          top={0}
+          left={0}
+          linkKind={1}
+          iconKind={1}
+          linkExternal={"https://www.google.com"}
+        />
+      </UserContextProvider>
+    );
+
+    expect(wrapper.find("a").hasClass("external-link")).toBe(true);
+  });
+
+  it("renders a internal link", () => {
+    const wrapper = mount(
+      <UserContextProvider>
+        <BrowserRouter>
+          <ActionPoint
+            title="Ext title"
+            description="test desc"
+            top={0}
+            left={0}
+            linkKind={0}
+            iconKind={1}
+            linkInternal={{
+              getFrontendUrl: "/myFrontendURL",
+              title: "My Frontend URL",
+            }}
+          />
+        </BrowserRouter>
+      </UserContextProvider>
+    );
+
+    expect(wrapper.find(".internal-link").exists()).toBe(true);
+  });
+
+  it("renders a modal link correctly", () => {
+    const wrapper = mount(
+      <UserContextProvider>
+        <ActionPoint
+          title="Ext title"
+          description="test desc"
+          top={0}
+          left={0}
+          linkKind={2}
+          iconKind={1}
+        />
+      </UserContextProvider>
+    );
+
+    expect(wrapper.find("a").hasClass("modal-link")).toBe(true);
+  });
+
+  it("renders a document link correctly", () => {
+    const wrapper = mount(
+      <UserContextProvider>
+        <ActionPoint
+          title="Ext title"
+          description="test desc"
+          top={0}
+          left={0}
+          linkKind={3}
+          iconKind={1}
+          linkExternal={"https://www.google.com"}
+        />
+      </UserContextProvider>
+    );
+
+    expect(wrapper.find("a").hasClass("document-link")).toBe(true);
+  });
+});
+
+describe("Test icon cssClasses per iconKind", () => {
+  let wrapper;
+  let iconCount = 0;
+  beforeEach(() => {
+    wrapper = mount(
+      <UserContextProvider>
+        <ActionPoint
+          title="Ext title"
+          top={0}
+          left={0}
+          iconKind={iconCount}
+          linkKind={1}
+        />
+      </UserContextProvider>
+    );
+    iconCount++;
+  });
+
+  it("renders icon-kind = 0 icon-CSS-class correctly", () => {
+    expect(wrapper.find("a").hasClass("links__icon--")).toBe(true);
+  });
+
+  it("renders icon-kind = 1 icon-CSS-class correctly", () => {
+    expect(wrapper.find("a").hasClass("links__icon--image")).toBe(true);
+  });
+
+  it("renders icon-kind = 2 icon-CSS-class correctly", () => {
+    expect(wrapper.find("a").hasClass("links__icon--video")).toBe(true);
+  });
+
+  it("renders icon-kind = 3 icon-CSS-class correctly", () => {
+    expect(wrapper.find("a").hasClass("links__icon--link")).toBe(true);
+  });
+
+  it("renders icon-kind = 4 icon-CSS-class correctly", () => {
+    expect(wrapper.find("a").hasClass("links__icon--document")).toBe(true);
+  });
+});
 
 describe("Test internal link rendering", () => {
   const wrapper = mount(
@@ -114,122 +230,5 @@ describe("Test external link rendering", () => {
     );
 
     expect(wrapper.find(".external-link").text()).toBe("Ext title");
-  });
-});
-
-describe("Test icon cssClasses per iconKind", () => {
-  let wrapper;
-  let iconCount = 0;
-  beforeEach(() => {
-    wrapper = mount(
-      <UserContextProvider>
-        <ActionPoint
-          title="Ext title"
-          top={0}
-          left={0}
-          iconKind={iconCount}
-          linkKind={1}
-        />
-      </UserContextProvider>
-    );
-    iconCount++;
-  });
-
-  it("renders icon-kind = 0 icon-CSS-class correctly", () => {
-    expect(wrapper.find("a").hasClass("links__icon--")).toBe(true);
-  });
-
-  it("renders icon-kind = 1 icon-CSS-class correctly", () => {
-    expect(wrapper.find("a").hasClass("links__icon--image")).toBe(true);
-  });
-
-  it("renders icon-kind = 2 icon-CSS-class correctly", () => {
-    expect(wrapper.find("a").hasClass("links__icon--video")).toBe(true);
-  });
-
-  it("renders icon-kind = 3 icon-CSS-class correctly", () => {
-    expect(wrapper.find("a").hasClass("links__icon--link")).toBe(true);
-  });
-
-  it("renders icon-kind = 4 icon-CSS-class correctly", () => {
-    expect(wrapper.find("a").hasClass("links__icon--document")).toBe(true);
-  });
-});
-
-describe("Test actionPoint rendering", () => {
-  it("renders a external link correctly", () => {
-    const wrapper = mount(
-      <UserContextProvider>
-        <ActionPoint
-          title="Ext title"
-          description="test desc"
-          top={0}
-          left={0}
-          linkKind={1}
-          iconKind={1}
-          linkExternal={"https://www.google.com"}
-        />
-      </UserContextProvider>
-    );
-
-    expect(wrapper.find("a").hasClass("external-link")).toBe(true);
-  });
-
-  it("renders a internal link", () => {
-    const wrapper = mount(
-      <UserContextProvider>
-        <BrowserRouter>
-          <ActionPoint
-            title="Ext title"
-            description="test desc"
-            top={0}
-            left={0}
-            linkKind={0}
-            iconKind={1}
-            linkInternal={{
-              getFrontendUrl: "/myFrontendURL",
-              title: "My Frontend URL",
-            }}
-          />
-        </BrowserRouter>
-      </UserContextProvider>
-    );
-
-    expect(wrapper.find(".internal-link").exists()).toBe(true);
-  });
-
-  it("renders a modal link correctly", () => {
-    const wrapper = mount(
-      <UserContextProvider>
-        <ActionPoint
-          title="Ext title"
-          description="test desc"
-          top={0}
-          left={0}
-          linkKind={2}
-          iconKind={1}
-        />
-      </UserContextProvider>
-    );
-
-    expect(wrapper.find("a").hasClass("modal-link")).toBe(true);
-  });
-
-  it("renders a document link correctly", () => {
-    const wrapper = mount(
-      <UserContextProvider>
-        <ActionPoint
-          title="Ext title"
-          description="test desc"
-          top={0}
-          left={0}
-          linkKind={3}
-          iconKind={1}
-          linkExternal={"https://www.google.com"}
-        />
-      </UserContextProvider>
-    );
-
-    expect(wrapper.find("a").hasClass("document-link")).toBe(true);
   });
 });
